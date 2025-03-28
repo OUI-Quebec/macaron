@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Macarons</title>
+    <link rel="icon" type="image/x-icon" href="static/img/favicon.png" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="branding-container">
+      <img src="static/img/ouiquebec.png" alt="Logo" height="150px" />
+      <h1>Générateur de macarons</h1>
+      <p>Créez vos macarons personnalisés en quelques étapes simples.</p>
+    </div>
+
+    <div class="container">
+      <div class="step-indicator">
+        <div class="step active" data-step="1">
+          <div class="step-number">1</div>
+          <span>Téléverser une l'image</span>
+        </div>
+        <div class="step" data-step="2">
+          <div class="step-number">2</div>
+          <span>Rognage</span>
+        </div>
+        <div class="step" data-step="3">
+          <div class="step-number">3</div>
+          <span>Générer le PDF</span>
+        </div>
+      </div>
+
+      <!-- Étape 1 - Upload -->
+      <div class="step-content active" data-step="1">
+        <h2>Étape 1 : Sélectionnez votre image</h2>
+        <div class="instructions">Formats supportés : JPG, PNG, GIF</div>
+        <div
+          class="upload-area"
+          onclick="document.getElementById('fileInput').click()"
+        >
+          Cliquez pour téléverser ou glissez-déposez votre image
+          <img id="previewImage" alt="Aperçu" />
+        </div>
+        <input type="file" id="fileInput" hidden accept="image/*" />
+        <div class="button-group">
+          <button onclick="nextStep()" id="nextStep1" disabled>
+            Suivant →
+          </button>
+        </div>
+      </div>
+
+      <!-- Étape 2 - Rognage -->
+      <div class="step-content" data-step="2">
+        <h2>Étape 2 : Ajustez le rognage</h2>
+        <div class="instructions">
+          Recadrez votre image pour qu'elle remplisse correctement le macaron
+        </div>
+        <div id="cropper-container"></div>
+        <div class="button-group">
+          <button class="secondary" onclick="previousStep()">
+            ← Précédent
+          </button>
+          <button onclick="nextStep()" id="nextStep2">Suivant →</button>
+        </div>
+      </div>
+
+      <!-- Étape 3 - Génération -->
+      <div class="step-content" data-step="3">
+        <h2>Étape 3 : Générer le PDF</h2>
+        <div class="instructions">
+          Vérifiez la prévisualisation avant de générer
+        </div>
+
+        <div class="preview-grid" id="previewGrid"></div>
+
+        <div class="button-group">
+          <button class="secondary" onclick="previousStep()">
+            ← Précédent
+          </button>
+          <button onclick="generatePDF()">Télécharger</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

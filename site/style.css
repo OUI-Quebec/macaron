@@ -1,0 +1,189 @@
+:root {
+  --primary-color: #4caf50;
+  --secondary-color: #45a049;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: hsl(55deg 23.08% 89.8%);
+}
+
+button {
+  font-weight: bold;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 29px;
+  padding: 1rem;
+}
+
+.branding-container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.branding-container h1 {
+  margin-top: 0;
+}
+
+.branding-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.step-indicator {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+}
+
+.step-number {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step.active .step-number {
+  background: var(--primary-color);
+  color: white;
+}
+
+.step-content {
+  display: none;
+  text-align: center;
+}
+
+.step-content h2 {
+  margin-top: 0;
+}
+
+.step-content.active {
+  display: block;
+}
+
+#cropper-container {
+  width: 600px;
+  height: 400px;
+  margin: 20px auto;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-group {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+button {
+  padding: 12px 24px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+  min-width: 120px;
+}
+
+button:hover {
+  background: var(--secondary-color);
+}
+
+button.secondary {
+  background: #666;
+}
+
+.upload-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 2rem auto;
+  max-width: 600px;
+  cursor: pointer;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-color);
+}
+
+#previewImage {
+  max-width: 200px;
+  margin: 20px auto;
+  display: none;
+}
+
+.instructions {
+  color: #666;
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+.upload-area.dragover {
+  border-color: var(--primary-color);
+  background: #f8f8f8;
+}
+
+/* Ajout du style pour la prévisualisation */
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+  max-width: 600px;
+  margin: 20px auto;
+  background: #eee;
+  padding: 2px;
+}
+
+.preview-cell {
+  aspect-ratio: 1;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ddd;
+}
+
+.scale-info {
+  font-size: 0.9em;
+  color: #999;
+}
+
+#cropper-container {
+  width: 600px;
+  height: 400px; /* Conserver un rectangle */
+  margin: 20px auto;
+  background: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Ajouter le cercle uniquement sur la preview */
+.preview-cell {
+  border-radius: 50%;
+}
+
+/* Style du cercle de rognage */
+.cropper-view-box {
+  border-radius: 50%;
+  outline: none;
+  box-shadow: 0 0 0 1px #fff;
+}
