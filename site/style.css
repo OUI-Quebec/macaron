@@ -79,14 +79,6 @@ button {
   display: block;
 }
 
-#cropper-container {
-  width: 600px;
-  height: 400px;
-  margin: 20px auto;
-  background: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
 .button-group {
   margin-top: 2rem;
   display: flex;
@@ -186,4 +178,96 @@ button.secondary {
   border-radius: 50%;
   outline: none;
   box-shadow: 0 0 0 1px #fff;
+}
+
+.image-options {
+  margin: 2rem 0;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.gallery-item {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 4px;
+  transition: all 0.3s;
+}
+
+.gallery-item:hover {
+  border-color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.or-separator {
+  text-align: center;
+  margin: 2rem 0;
+  font-weight: bold;
+  color: #666;
+  position: relative;
+}
+
+.or-separator::before,
+.or-separator::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: #ddd;
+}
+
+.or-separator::before {
+  left: 0;
+}
+
+.or-separator::after {
+  right: 0;
+}
+
+.gallery-item.selected {
+  border-color: var(--secondary-color);
+  background: #f8fff8;
+}
+
+.cropper-point {
+  width: 15px !important;
+  height: 15px !important;
+  background: var(--primary-color) !important;
+  border-radius: 50%;
+  opacity: 0.9;
+  border: 2px solid white;
+}
+
+/* Positionnement des poignées */
+.cropper-point.point-se,
+.cropper-point.point-sw,
+.cropper-point.point-nw,
+.cropper-point.point-ne {
+  margin: -7.5px !important; /* Ajuster selon la taille des poignées */
+}
+
+/* Lignes de guidage */
+.cropper-line {
+  background: var(--primary-color) !important;
+  opacity: 0.3;
+  width: 3px !important;
+}
+
+/* Effet hover */
+.cropper-point:hover {
+  transform: scale(1.2);
+  opacity: 1;
 }

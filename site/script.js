@@ -127,12 +127,17 @@ function initCropper(imageSrc) {
 
   cropper = new Cropper(container.querySelector("img"), {
     aspectRatio: 1,
-    viewMode: 0, // Mode libre pour permettre le redimensionnement
-    autoCropArea: 0.8,
+    viewMode: 0, // Mode libre
+    autoCropArea: 1, // 100% de la zone
+    center: true,
     guides: false,
-    highlight: false,
-    cropBoxMovable: true,
-    cropBoxResizable: true, // Réactiver le redimensionnement
+    ready() {
+      // Ajustement automatique initial
+      this.cropper.setCropBoxData({
+        width: this.cropper.getContainerData().width,
+        height: this.cropper.getContainerData().height,
+      });
+    },
   });
 }
 
@@ -188,4 +193,24 @@ async function generatePDF() {
   }
 
   pdf.save("macarons.pdf");
+}
+
+function selectPresetImage(filename) {
+  // Chemin vers les images haute résolution
+  const fullImagePath = `static/img/images-proposees/${filename}`;
+
+  // Simuler le chargement d'un fichier
+  fetch(fullImagePath)
+    .then((res) => res.blob())
+    .then((blob) => {
+      handleImage(new File([blob], filename, { type: blob.type }));
+    });
+
+  // Désélectionner toutes les miniatures
+  document.querySelectorAll(".gallery-item").forEach((item) => {
+    item.classList.remove("selected");
+  });
+
+  // Marquer la miniature sélectionnée
+  event.currentTarget.classList.add("selected");
 }
