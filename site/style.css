@@ -8,6 +8,8 @@ body {
   margin: 0;
   padding: 20px;
   background-color: hsl(55deg 23.08% 89.8%);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 button {
@@ -15,8 +17,6 @@ button {
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
   background: white;
   border-radius: 29px;
   padding: 1rem;
@@ -24,7 +24,7 @@ button {
 
 .branding-container {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .branding-container h1 {
@@ -332,4 +332,17 @@ button.secondary {
   padding: 0.5rem;
   background: #f5f5f5;
   border-radius: 8px;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+footer,
+footer a {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
 }

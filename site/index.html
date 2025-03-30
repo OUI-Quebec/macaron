@@ -14,7 +14,12 @@
     <div class="branding-container">
       <div class="branding-title-container">
         <h1>Générateur de macarons des</h1>
-        <img src="static/img/ouiquebec.png" alt="Logo" height="30px" />
+        <a
+          href="https://www.ouiquebec.org/"
+          target="_blank"
+          referrerpolicy="no-referrer"
+          ><img src="static/img/ouiquebec.png" alt="Logo" height="30px"
+        /></a>
       </div>
 
       <p>Créez vos macarons personnalisés en quelques étapes simples.</p>
@@ -231,6 +236,24 @@
         </div>
       </div>
     </div>
+
+    <footer>
+      Code source disponible sur
+      <a
+        href="https://github.com/OUI-Quebec/macaron"
+        target="_blank"
+        referrerpolicy="no-referrer"
+        >Github
+        <img
+          src="static/img/github-mark.svg"
+          alt="triangle with all three sides equal"
+          height="15" /></a
+      >. Tous droits réservés © <span id="currentYear"></span>
+      <script>
+        document.getElementById("currentYear").textContent =
+          new Date().getFullYear();
+      </script>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
