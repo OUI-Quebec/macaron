@@ -1,10 +1,38 @@
 let cropper;
 let currentStep = 1;
 let uploadedImage = null;
-const TARGET_SIZE_CM = 3.18;
+const TARGET_SIZE_CM = 4.13766;
 const SPACING_CM = 0.27;
-const ROWS = 8;
-const COLS = 6;
+const ROWS = 6;
+const COLS = 4;
+
+// Guides de diamètre en cm
+const DIAMETER_GUIDES = [
+  {
+    size: 2.921,
+    sizeInch: 1.15,
+    color: "#FF0000",
+    description: "Zone pour imprimer la face du macaron.",
+  }, // Rouge
+  {
+    size: 3.175,
+    sizeInch: 1.25,
+    color: "#00FF00",
+    description: "Limite de la face du macaron.",
+  }, // Vert
+  {
+    size: 3.556,
+    sizeInch: 1.4,
+    color: "#999999",
+    description: "Rebord du macaron.",
+  }, // Gris
+  {
+    size: 4.13766,
+    sizeInch: 1.625,
+    color: "#000000",
+    description: "Ligne de coupe.",
+  }, // Noir
+];
 
 // Gestion des étapes
 function updateSteps(newStep) {
@@ -100,6 +128,20 @@ fileInput.addEventListener("change", (e) => {
   }
 });
 
+// Ajouter la légende des guides
+const legend = document.createElement("div");
+legend.className = "diameter-legend";
+legend.innerHTML = DIAMETER_GUIDES.map(
+  (guide) =>
+    `<div class="legend-item">
+    <span class="color-box" style="background-color: ${guide.color}"></span>
+    <span>${guide.sizeInch} pouces (${guide.size} cm) - ${guide.description}</span>
+  </div>`
+).join("");
+
+// Ajouter la légende après le conteneur du cropper
+document.getElementById("cropper-container").after(legend);
+
 function handleImage(file) {
   const reader = new FileReader();
   reader.onload = (e) => {
@@ -131,13 +173,75 @@ function initCropper(imageSrc) {
     autoCropArea: 1, // 100% de la zone
     center: true,
     guides: false,
+    zoomable: false,
     ready() {
       // Ajustement automatique initial
       this.cropper.setCropBoxData({
         width: this.cropper.getContainerData().width,
         height: this.cropper.getContainerData().height,
       });
+
+      // Ajouter les guides de diamètre après l'initialisation
+      addDiameterGuides();
     },
+    crop() {
+      // Mettre à jour les guides lors du redimensionnement ou déplacement
+      updateDiameterGuides();
+    },
+  });
+}
+
+// Fonction pour ajouter les guides de diamètre
+function addDiameterGuides() {
+  // Supprimer les guides existants
+  const existingGuides = document.querySelectorAll(".diameter-guide");
+  existingGuides.forEach((guide) => guide.remove());
+
+  // Créer un conteneur pour les guides
+  const guidesContainer = document.createElement("div");
+  guidesContainer.className = "diameter-guides-container";
+
+  // Ajouter les cercles guides
+  DIAMETER_GUIDES.forEach((guide) => {
+    const guideEl = document.createElement("div");
+    guideEl.className = "diameter-guide";
+    guideEl.dataset.size = guide.size;
+    guideEl.style.border = `2px solid ${guide.color}`;
+    guidesContainer.appendChild(guideEl);
+  });
+
+  // Ajouter le conteneur au document
+  const cropperContainer = document.querySelector(".cropper-container");
+  cropperContainer.appendChild(guidesContainer);
+
+  // Mettre à jour les positions des guides
+  updateDiameterGuides();
+}
+
+// Fonction pour mettre à jour les guides de diamètre
+function updateDiameterGuides() {
+  if (!cropper) return;
+
+  const cropBoxData = cropper.getCropBoxData();
+  const { width, height, left, top } = cropBoxData;
+
+  // Le centre du cercle est le centre de la cropBox
+  const centerX = left + width / 2;
+  const centerY = top + height / 2;
+
+  // La taille maximale (TARGET_SIZE_CM) correspond à la largeur/hauteur de la cropBox
+  // Calculons le facteur d'échelle (pixels par cm)
+  const pixelsPerCm = width / TARGET_SIZE_CM;
+
+  // Mettre à jour la position et la taille de chaque guide
+  document.querySelectorAll(".diameter-guide").forEach((guide) => {
+    const sizeCm = parseFloat(guide.dataset.size);
+    const sizePixels = sizeCm * pixelsPerCm;
+
+    guide.style.width = `${sizePixels}px`;
+    guide.style.height = `${sizePixels}px`;
+    guide.style.left = `${centerX - sizePixels / 2}px`;
+    guide.style.top = `${centerY - sizePixels / 2}px`;
   });
 }
 
