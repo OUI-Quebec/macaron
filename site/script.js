@@ -79,8 +79,8 @@ function updatePreview() {
       const previewGrid = document.getElementById("previewGrid");
       previewGrid.innerHTML = "";
 
-      // Créer 48 cellules (6x8)
-      for (let i = 0; i < 48; i++) {
+      // Créer 24 cellules (4x6)
+      for (let i = 0; i < 24; i++) {
         const cell = document.createElement("div");
         cell.className = "preview-cell";
         cell.style.backgroundImage = `url(${url})`;
