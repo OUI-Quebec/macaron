@@ -117,9 +117,15 @@ button.secondary {
   border: 2px dashed #ccc;
   border-radius: 8px;
   padding: 1rem;
-  margin: 2rem auto;
-  max-width: 600px;
+  width: 600px;
+  max-width: 90%;
   cursor: pointer;
+  min-height: 120px;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .upload-area:hover {
@@ -134,7 +140,6 @@ button.secondary {
 
 .instructions {
   color: #666;
-  margin: 1rem 0;
   font-style: italic;
 }
 
@@ -213,7 +218,7 @@ button.secondary {
 }
 
 .gallery-item img {
-  width: 100%;
+  width: 120px;
   height: 120px;
   object-fit: cover;
   border-radius: 4px;
@@ -243,6 +248,13 @@ button.secondary {
 
 .or-separator::after {
   right: 0;
+}
+
+.personnal-design {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .gallery-item.selected {

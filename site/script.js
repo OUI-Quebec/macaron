@@ -174,6 +174,7 @@ function initCropper(imageSrc) {
     center: true,
     guides: false,
     zoomable: false,
+    background: false,
     ready() {
       // Ajustement automatique initial
       this.cropper.setCropBoxData({

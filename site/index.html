@@ -178,15 +178,28 @@
           <!-- Ajouter d'autres images -->
         </div>
         <div class="or-separator">OU</div>
-        <div class="instructions">Formats supportés : JPG, PNG, GIF</div>
-        <div
-          class="upload-area"
-          onclick="document.getElementById('fileInput').click()"
-        >
-          Cliquez pour téléverser ou glissez-déposez votre image
-          <img id="previewImage" alt="Aperçu" />
+
+        <div class="personnal-design">
+          <div
+            class="upload-area"
+            onclick="document.getElementById('fileInput').click()"
+          >
+            Cliquez pour téléverser ou glissez-déposez votre image
+            <br />
+            <div class="instructions">Formats supportés : JPG, PNG, GIF</div>
+            <img id="previewImage" alt="Aperçu" />
+          </div>
+          <input type="file" id="fileInput" hidden accept="image/*" />
+          <div class="personnal-design-template">
+            <a
+              download="static/img/guide.png"
+              href="static/img/guide.png"
+              title="Modèle_Macaron"
+              >Modèle</a
+            >
+            disponible pour référence.
+          </div>
         </div>
-        <input type="file" id="fileInput" hidden accept="image/*" />
         <div class="button-group">
           <button onclick="nextStep()" id="nextStep1" disabled>
             Suivant →
@@ -208,7 +221,7 @@
             href="https://cdn.shopify.com/s/files/1/1438/8774/files/Specifications-montage-macarons-125.pdf?v=1679586258"
             target="_blank"
             referrerpolicy="no-referrer"
-            >document du fabricant</a
+            >document de Macaron Québec</a
           >.
         </div>
         <div class="button-group">
