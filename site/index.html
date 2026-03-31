@@ -33,11 +33,7 @@
         </div>
         <div class="step" data-step="2">
           <div class="step-number">2</div>
-          <span>Rognage</span>
-        </div>
-        <div class="step" data-step="3">
-          <div class="step-number">3</div>
-          <span>Générer le PDF</span>
+          <span>Rognage et génération</span>
         </div>
       </div>
 
@@ -98,24 +94,7 @@
           <button class="secondary" onclick="previousStep()">
             ← Précédent
           </button>
-          <button onclick="nextStep()" id="nextStep2">Suivant →</button>
-        </div>
-      </div>
-
-      <!-- Étape 3 - Génération -->
-      <div class="step-content" data-step="3">
-        <h2>Étape 3 : Générer le PDF</h2>
-        <div class="instructions">
-          Vérifiez la prévisualisation avant de générer
-        </div>
-
-        <div class="preview-grid" id="previewGrid"></div>
-
-        <div class="button-group">
-          <button class="secondary" onclick="previousStep()">
-            ← Précédent
-          </button>
-          <button onclick="generatePDF()">Télécharger</button>
+          <button onclick="generatePDF()">Télécharger le PDF</button>
         </div>
       </div>
     </div>

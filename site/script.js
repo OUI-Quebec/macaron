@@ -140,46 +140,11 @@ function updateSteps(newStep) {
     initCropper(uploadedImage);
   }
 
-  if (newStep === 3 && cropper) {
-    updatePreview();
-  }
-
   currentStep = newStep;
 }
 
-// Fonction pour mettre à jour la prévisualisation
-function updatePreview() {
-  if (!cropper) return;
-
-  // Créer un canvas temporaire
-  const tempCanvas = cropper.getCroppedCanvas({
-    width: 200,
-    height: 200,
-    fillColor: "#fff",
-  });
-
-  // S'assurer que le canvas est prêt
-  tempCanvas.toBlob(
-    (blob) => {
-      const url = URL.createObjectURL(blob);
-      const previewGrid = document.getElementById("previewGrid");
-      previewGrid.innerHTML = "";
-
-      // Créer 24 cellules (4x6)
-      for (let i = 0; i < 24; i++) {
-        const cell = document.createElement("div");
-        cell.className = "preview-cell";
-        cell.style.backgroundImage = `url(${url})`;
-        previewGrid.appendChild(cell);
-      }
-    },
-    "image/jpeg",
-    0.9,
-  );
-}
-
 function nextStep() {
-  if (currentStep < 3) updateSteps(currentStep + 1);
+  if (currentStep < 2) updateSteps(currentStep + 1);
 }
 
 function previousStep() {
