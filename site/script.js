@@ -6,6 +6,74 @@ const SPACING_CM = 0.27;
 const ROWS = 6;
 const COLS = 4;
 
+// Liste des images disponibles
+const PRESET_IMAGES = [
+  "oui-quebec.png",
+  "oui-bleu-fonce.png",
+  "oui-bleu-pale.png",
+  "oui-jaune.png",
+  "oui-mauve.png",
+  "oui-orange-fonce.png",
+  "oui-orange-pale.png",
+  "oui-rose.png",
+  "oui-turquoise.png",
+  "oui-vert.png",
+  "allumettes-bleu.png",
+  "allumettes-rouge.png",
+  "allumettes-creme.png",
+  "allumettes-jaune.png",
+  "allumettes-marron.png",
+  "club-pays-oiseau-vin-rouge.png",
+  "club-pays-oiseau-rouge-vin.png",
+  "club-pays-oiseau-bleu-vin.png",
+  "club-pays-oiseau-mauve-bleu.png",
+  "club-pays-oiseau-vin-blanc.png",
+  "club-pays-oiseau-vin-mauve.png",
+  "club-pays-oiseau-mauve-vin.png",
+  "club-pays-oiseau-blanc-mauve.png",
+  "club-pays-oiseau-vin-bleu.png",
+  "club-pays-oiseau-bleu-bleu.png",
+  "club-pays-oiseau-bleu-blanc.png",
+  "club-pays-oiseau-blanc-brun.png",
+  "club-pays-oiseau-blanc-bleu.png",
+  "club-pays-oiseau-mauve-blanc.png",
+  "club-pays-oiseau-blanc-rouge.png",
+  "club-pays-oiseau-rouge-blanc.png",
+];
+
+// Fonction pour formater le nom de fichier en texte lisible
+function formatImageName(filename) {
+  // Retirer l'extension
+  const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
+  // Remplacer les tirets par des espaces et capitaliser
+  const formatted = nameWithoutExt
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+  return formatted;
+}
+
+// Charger dynamiquement les images dans la galerie
+function loadGalleryImages() {
+  const gallery = document.getElementById("galleryGrid");
+
+  PRESET_IMAGES.forEach((filename) => {
+    const galleryItem = document.createElement("div");
+    galleryItem.className = "gallery-item";
+    galleryItem.onclick = () => selectPresetImage(filename);
+
+    const img = document.createElement("img");
+    img.src = `static/img/images-proposees/${filename}`;
+    img.alt = formatImageName(filename);
+
+    galleryItem.appendChild(img);
+    gallery.appendChild(galleryItem);
+  });
+}
+
+// Initialiser la galerie au chargement de la page
+document.addEventListener("DOMContentLoaded", loadGalleryImages);
+
 // Guides de diamètre en cm
 const DIAMETER_GUIDES = [
   {
@@ -88,7 +156,7 @@ function updatePreview() {
       }
     },
     "image/jpeg",
-    0.9
+    0.9,
   );
 }
 
@@ -136,7 +204,7 @@ legend.innerHTML = DIAMETER_GUIDES.map(
     `<div class="legend-item">
     <span class="color-box" style="background-color: ${guide.color}"></span>
     <span>${guide.sizeInch} pouces (${guide.size} cm) - ${guide.description}</span>
-  </div>`
+  </div>`,
 ).join("");
 
 // Ajouter la légende après le conteneur du cropper
@@ -287,7 +355,7 @@ async function generatePDF() {
       currentX,
       currentY,
       TARGET_SIZE_CM,
-      TARGET_SIZE_CM
+      TARGET_SIZE_CM,
     );
     currentX += TARGET_SIZE_CM + SPACING_CM;
 
