@@ -1,77 +1,29 @@
+// ============================================================================
+// VARIABLES D'ÉTAT
+// ============================================================================
+
 let cropper;
 let currentStep = 1;
 let uploadedImage = null;
-const TARGET_SIZE_CM = 4.13766;
-const SPACING_CM = 0.27;
-const ROWS = 6;
-const COLS = 4;
 
-// Liste des images disponibles
-const PRESET_IMAGES = [
-  "oui-quebec.png",
-  "oui-bleu-fonce.png",
-  "oui-bleu-pale.png",
-  "oui-jaune.png",
-  "oui-mauve.png",
-  "oui-orange-fonce.png",
-  "oui-orange-pale.png",
-  "oui-rose.png",
-  "oui-turquoise.png",
-  "oui-vert.png",
-  "allumettes-bleu.png",
-  "allumettes-rouge.png",
-  "allumettes-creme.png",
-  "allumettes-jaune.png",
-  "allumettes-marron.png",
-  "club-pays-oiseau-vin-rouge.png",
-  "club-pays-oiseau-rouge-vin.png",
-  "club-pays-oiseau-bleu-vin.png",
-  "club-pays-oiseau-mauve-bleu.png",
-  "club-pays-oiseau-vin-blanc.png",
-  "club-pays-oiseau-vin-mauve.png",
-  "club-pays-oiseau-mauve-vin.png",
-  "club-pays-oiseau-blanc-mauve.png",
-  "club-pays-oiseau-vin-bleu.png",
-  "club-pays-oiseau-bleu-bleu.png",
-  "club-pays-oiseau-bleu-blanc.png",
-  "club-pays-oiseau-blanc-brun.png",
-  "club-pays-oiseau-blanc-bleu.png",
-  "club-pays-oiseau-mauve-blanc.png",
-  "club-pays-oiseau-blanc-rouge.png",
-  "club-pays-oiseau-rouge-blanc.png",
-  "club-pays-cp-blanc-rouge.png",
-  "club-pays-cp-vin-rouge.png",
-  "club-pays-cp-rouge-vin.png",
-  "club-pays-cp-marron-bleu.png",
-  "club-pays-cp-bleu-vin.png",
-  "club-pays-cp-mauve-bleu.png",
-  "club-pays-cp-vin-blanc.png",
-  "club-pays-cp-vin-mauve.png",
-  "club-pays-cp-mauve-vin.png",
-  "club-pays-cp-blanc-mauve.png",
-  "club-pays-cp-brun-bleu.png",
-  "club-pays-cp-vin-bleu.png",
-  "club-pays-cp-bleu-bleu.png",
-  "club-pays-cp-bleu-blanc.png",
-  "club-pays-cp-blanc-vin.png",
-  "club-pays-cp-blanc-bleu.png",
-  "club-pays-cp-mauve-blanc.png",
-  "club-pays-cp-rouge-blanc.png",
-];
+// ============================================================================
+// GALERIE D'IMAGES
+// ============================================================================
 
-// Fonction pour formater le nom de fichier en texte lisible
+/**
+ * Formate le nom de fichier en texte lisible pour l'affichage
+ */
 function formatImageName(filename) {
-  // Retirer l'extension
   const nameWithoutExt = filename.replace(/\.[^/.]+$/, "");
-  // Remplacer les tirets par des espaces et capitaliser
-  const formatted = nameWithoutExt
+  return nameWithoutExt
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
-  return formatted;
 }
 
-// Charger dynamiquement les images dans la galerie
+/**
+ * Charge dynamiquement les images prédéfinies dans la galerie
+ */
 function loadGalleryImages() {
   const gallery = document.getElementById("galleryGrid");
 
@@ -89,38 +41,34 @@ function loadGalleryImages() {
   });
 }
 
-// Initialiser la galerie au chargement de la page
-document.addEventListener("DOMContentLoaded", loadGalleryImages);
+/**
+ * Sélectionne et charge une image prédéfinie depuis la galerie
+ */
+function selectPresetImage(filename) {
+  const fullImagePath = `static/img/images-proposees/${filename}`;
 
-// Guides de diamètre en cm
-const DIAMETER_GUIDES = [
-  {
-    size: 2.921,
-    sizeInch: 1.15,
-    color: "#FF0000",
-    description: "Zone pour imprimer la face du macaron.",
-  }, // Rouge
-  {
-    size: 3.175,
-    sizeInch: 1.25,
-    color: "#00FF00",
-    description: "Limite de la face du macaron.",
-  }, // Vert
-  {
-    size: 3.556,
-    sizeInch: 1.4,
-    color: "#999999",
-    description: "Rebord du macaron.",
-  }, // Gris
-  {
-    size: 4.13766,
-    sizeInch: 1.625,
-    color: "#000000",
-    description: "Ligne de coupe.",
-  }, // Noir
-];
+  fetch(fullImagePath)
+    .then((res) => res.blob())
+    .then((blob) => {
+      handleImage(new File([blob], filename, { type: blob.type }));
+    });
 
-// Gestion des étapes
+  // Désélectionner toutes les miniatures
+  document.querySelectorAll(".gallery-item").forEach((item) => {
+    item.classList.remove("selected");
+  });
+
+  // Marquer la miniature sélectionnée
+  event.currentTarget.classList.add("selected");
+}
+
+// ============================================================================
+// GESTION DES ÉTAPES
+// ============================================================================
+
+/**
+ * Met à jour l'affichage pour passer à une nouvelle étape
+ */
 function updateSteps(newStep) {
   document.querySelectorAll(".step").forEach((step) => {
     step.classList.remove("active");
@@ -151,48 +99,45 @@ function previousStep() {
   if (currentStep > 1) updateSteps(currentStep - 1);
 }
 
-// Gestion du drag and drop
-const uploadArea = document.querySelector(".upload-area");
-const fileInput = document.getElementById("fileInput");
+// ============================================================================
+// CHARGEMENT D'IMAGE (Upload & Drag-Drop)
+// ============================================================================
 
-uploadArea.addEventListener("dragover", (e) => {
-  e.preventDefault();
-  uploadArea.classList.add("dragover");
-});
+/**
+ * Configure la zone de drag-and-drop pour l'upload d'images
+ */
+function setupUploadArea() {
+  const uploadArea = document.querySelector(".upload-area");
+  const fileInput = document.getElementById("fileInput");
 
-uploadArea.addEventListener("dragleave", () => {
-  uploadArea.classList.remove("dragover");
-});
+  uploadArea.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    uploadArea.classList.add("dragover");
+  });
 
-uploadArea.addEventListener("drop", (e) => {
-  e.preventDefault();
-  uploadArea.classList.remove("dragover");
-  const files = e.dataTransfer.files;
-  if (files.length > 0) {
-    handleImage(files[0]);
-  }
-});
+  uploadArea.addEventListener("dragleave", () => {
+    uploadArea.classList.remove("dragover");
+  });
 
-fileInput.addEventListener("change", (e) => {
-  if (e.target.files.length > 0) {
-    handleImage(e.target.files[0]);
-  }
-});
+  uploadArea.addEventListener("drop", (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove("dragover");
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      handleImage(files[0]);
+    }
+  });
 
-// Ajouter la légende des guides
-const legend = document.createElement("div");
-legend.className = "diameter-legend";
-legend.innerHTML = DIAMETER_GUIDES.map(
-  (guide) =>
-    `<div class="legend-item">
-    <span class="color-box" style="background-color: ${guide.color}"></span>
-    <span>${guide.sizeInch} pouces (${guide.size} cm) - ${guide.description}</span>
-  </div>`,
-).join("");
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files.length > 0) {
+      handleImage(e.target.files[0]);
+    }
+  });
+}
 
-// Ajouter la légende après le conteneur du cropper
-document.getElementById("cropper-container").after(legend);
-
+/**
+ * Traite une image uploadée et prépare la navigation vers l'étape de rognage
+ */
 function handleImage(file) {
   const reader = new FileReader();
   reader.onload = (e) => {
@@ -210,6 +155,13 @@ function handleImage(file) {
   reader.readAsDataURL(file);
 }
 
+// ============================================================================
+// CROPPER - Initialisation et Guides
+// ============================================================================
+
+/**
+ * Initialise le cropper avec l'image source
+ */
 function initCropper(imageSrc) {
   if (cropper) {
     cropper.destroy();
@@ -220,34 +172,32 @@ function initCropper(imageSrc) {
 
   cropper = new Cropper(container.querySelector("img"), {
     aspectRatio: 1,
-    viewMode: 0, // Mode libre
-    autoCropArea: 1, // 100% de la zone
+    viewMode: 0,
+    autoCropArea: 1,
     center: true,
     guides: false,
     zoomable: false,
     background: false,
     ready() {
-      // Ajustement automatique initial
       this.cropper.setCropBoxData({
         width: this.cropper.getContainerData().width,
         height: this.cropper.getContainerData().height,
       });
 
-      // Ajouter les guides de diamètre après l'initialisation
       addDiameterGuides();
     },
     crop() {
-      // Mettre à jour les guides lors du redimensionnement ou déplacement
       updateDiameterGuides();
     },
   });
 }
 
-// Fonction pour ajouter les guides de diamètre
+/**
+ * Ajoute les cercles guides de diamètre sur le cropper
+ */
 function addDiameterGuides() {
   // Supprimer les guides existants
-  const existingGuides = document.querySelectorAll(".diameter-guide");
-  existingGuides.forEach((guide) => guide.remove());
+  document.querySelectorAll(".diameter-guide").forEach((guide) => guide.remove());
 
   // Créer un conteneur pour les guides
   const guidesContainer = document.createElement("div");
@@ -266,26 +216,22 @@ function addDiameterGuides() {
   const cropperContainer = document.querySelector(".cropper-container");
   cropperContainer.appendChild(guidesContainer);
 
-  // Mettre à jour les positions des guides
   updateDiameterGuides();
 }
 
-// Fonction pour mettre à jour les guides de diamètre
+/**
+ * Met à jour la position et la taille des guides en fonction du crop box
+ */
 function updateDiameterGuides() {
   if (!cropper) return;
 
   const cropBoxData = cropper.getCropBoxData();
   const { width, height, left, top } = cropBoxData;
 
-  // Le centre du cercle est le centre de la cropBox
   const centerX = left + width / 2;
   const centerY = top + height / 2;
-
-  // La taille maximale (TARGET_SIZE_CM) correspond à la largeur/hauteur de la cropBox
-  // Calculons le facteur d'échelle (pixels par cm)
   const pixelsPerCm = width / TARGET_SIZE_CM;
 
-  // Mettre à jour la position et la taille de chaque guide
   document.querySelectorAll(".diameter-guide").forEach((guide) => {
     const sizeCm = parseFloat(guide.dataset.size);
     const sizePixels = sizeCm * pixelsPerCm;
@@ -297,17 +243,41 @@ function updateDiameterGuides() {
   });
 }
 
-// Génération PDF
+/**
+ * Crée la légende des guides de diamètre
+ */
+function setupDiameterLegend() {
+  const legend = document.createElement("div");
+  legend.className = "diameter-legend";
+  legend.innerHTML = DIAMETER_GUIDES.map(
+    (guide) =>
+      `<div class="legend-item">
+        <span class="color-box" style="background-color: ${guide.color}"></span>
+        <span>${guide.sizeInch} pouces (${guide.size} cm) - ${guide.description}</span>
+      </div>`,
+  ).join("");
+
+  document.getElementById("cropper-container").after(legend);
+}
+
+// ============================================================================
+// GÉNÉRATION PDF
+// ============================================================================
+
+/**
+ * Génère un PDF avec 24 macarons disposés en grille (6 rangées × 4 colonnes)
+ */
 async function generatePDF() {
   if (!cropper) return;
 
+  // Créer le canvas avec l'image rognée
   const canvas = cropper.getCroppedCanvas({
     width: 800,
     height: 800,
     fillColor: "#fff",
   });
 
-  // Création du masque circulaire
+  // Appliquer un masque circulaire
   const ctx = canvas.getContext("2d");
   ctx.globalCompositeOperation = "destination-in";
   ctx.beginPath();
@@ -315,6 +285,7 @@ async function generatePDF() {
   ctx.closePath();
   ctx.fill();
 
+  // Créer le PDF
   const imgData = canvas.toDataURL("image/png");
   const pdf = new jspdf.jsPDF("p", "cm", "letter");
 
@@ -326,6 +297,7 @@ async function generatePDF() {
   let currentY =
     (pageHeight - (ROWS * TARGET_SIZE_CM + (ROWS - 1) * SPACING_CM)) / 2;
 
+  // Disposer les macarons en grille
   for (let i = 0; i < ROWS * COLS; i++) {
     if (i !== 0 && i % COLS === 0) {
       currentY += TARGET_SIZE_CM + SPACING_CM;
@@ -351,22 +323,18 @@ async function generatePDF() {
   pdf.save("macarons.pdf");
 }
 
-function selectPresetImage(filename) {
-  // Chemin vers les images haute résolution
-  const fullImagePath = `static/img/images-proposees/${filename}`;
+// ============================================================================
+// INITIALISATION
+// ============================================================================
 
-  // Simuler le chargement d'un fichier
-  fetch(fullImagePath)
-    .then((res) => res.blob())
-    .then((blob) => {
-      handleImage(new File([blob], filename, { type: blob.type }));
-    });
-
-  // Désélectionner toutes les miniatures
-  document.querySelectorAll(".gallery-item").forEach((item) => {
-    item.classList.remove("selected");
-  });
-
-  // Marquer la miniature sélectionnée
-  event.currentTarget.classList.add("selected");
+/**
+ * Initialise l'application au chargement de la page
+ */
+function init() {
+  loadGalleryImages();
+  setupUploadArea();
+  setupDiameterLegend();
 }
+
+// Lancer l'initialisation
+document.addEventListener("DOMContentLoaded", init);
